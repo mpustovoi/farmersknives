@@ -5,8 +5,6 @@ import com.ianm1647.farmersknives.item.*;
 import com.ianm1647.farmersknives.item.compat.botania.ElementiumKnifeItem;
 import com.ianm1647.farmersknives.item.compat.botania.ManasteelKnifeItem;
 import com.ianm1647.farmersknives.item.compat.botania.TerrasteelKnifeItem;
-import com.nhoryzon.mc.farmersdelight.FarmersDelightMod;
-import com.nhoryzon.mc.farmersdelight.item.KnifeItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -64,11 +62,6 @@ public class ModRegistry {
                     new FabricItemSettings().fireproof()));
             ItemList.NETHER_RUBY_KNIFE = knife("nether_ruby_knife", new KnifeItem(ToolMaterials.NETHER_RUBY,
                     new FabricItemSettings().fireproof()));
-        }
-        if (FabricLoader.getInstance().isModLoaded("botania")) {
-            ItemList.MANASTEEL_KNIFE = knife("manasteel_knife", new ManasteelKnifeItem(new FabricItemSettings()));
-            ItemList.ELEMENTIUM_KNIFE = knife("elementium_knife", new ElementiumKnifeItem(new FabricItemSettings()));
-            ItemList.TERRA_KNIFE = knife("terra_knife", new TerrasteelKnifeItem(new FabricItemSettings()));
         }
         if (FabricLoader.getInstance().isModLoaded("byg")) {
             ItemList.PENDORITE_KNIFE = knife("pendorite_knife", new KnifeItem(ToolMaterials.PENDORITE,
@@ -171,10 +164,17 @@ public class ModRegistry {
         if (FabricLoader.getInstance().isModLoaded("winterly")) {
             ItemList.CRYOMARBLE_KNIFE = knife("cryomarble_knife", new KnifeItem(net.minecraft.item.ToolMaterials.DIAMOND, new FabricItemSettings()));
         }
+        /*
+        if (FabricLoader.getInstance().isModLoaded("botania")) {
+            ItemList.MANASTEEL_KNIFE = knife("manasteel_knife", new ManasteelKnifeItem(new FabricItemSettings()));
+            ItemList.ELEMENTIUM_KNIFE = knife("elementium_knife", new ElementiumKnifeItem(new FabricItemSettings()));
+            ItemList.TERRA_KNIFE = knife("terra_knife", new TerrasteelKnifeItem(new FabricItemSettings()));
+        }
+        */
     }
 
     private static Item knife(String name, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(FarmersDelightMod.ITEM_GROUP).register(entries -> entries.add(item));
+        ItemGroupEvents.modifyEntriesEvent(FarmersKnives.GROUP).register(entries -> entries.add(item));
         return Registry.register(Registries.ITEM, new Identifier(FarmersKnives.MODID, name), item);
     }
 }

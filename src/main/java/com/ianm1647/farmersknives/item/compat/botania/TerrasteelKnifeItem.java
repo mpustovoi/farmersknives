@@ -1,14 +1,18 @@
 package com.ianm1647.farmersknives.item.compat.botania;
 
 import com.ianm1647.farmersknives.item.ItemList;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -21,7 +25,6 @@ import vazkii.botania.api.mana.BurstProperties;
 import vazkii.botania.api.mana.LensEffectItem;
 import vazkii.botania.common.entity.ManaBurstEntity;
 import vazkii.botania.common.handler.BotaniaSounds;
-import vazkii.botania.common.item.BotaniaItems;
 import vazkii.botania.network.serverbound.LeftClickPacket;
 import vazkii.botania.xplat.ClientXplatAbstractions;
 
@@ -31,21 +34,16 @@ public class TerrasteelKnifeItem extends ManasteelKnifeItem implements LensEffec
 
     private static final int MANA_PER_DAMAGE = 100;
 
-    public TerrasteelKnifeItem(Settings props) {
+    public TerrasteelKnifeItem(FabricItemSettings props) {
         super(BotaniaAPI.instance().getTerrasteelItemTier(), props);
     }
 
-    public static void leftClick(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() instanceof TerrasteelKnifeItem) {
+    @Override
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+        if (clickType == ClickType.LEFT && !stack.isEmpty() && stack.getItem() instanceof TerrasteelKnifeItem) {
             ClientXplatAbstractions.INSTANCE.sendToServer(LeftClickPacket.INSTANCE);
         }
-    }
-
-    public static ActionResult attackEntity(PlayerEntity player, World world, Hand hand, Entity target, @Nullable EntityHitResult hit) {
-        if (!player.getWorld().isClient) {
-            trySpawnBurst(player);
-        }
-        return ActionResult.PASS;
+        return false;
     }
 
     public static void trySpawnBurst(PlayerEntity player) {

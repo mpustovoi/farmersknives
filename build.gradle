@@ -3,12 +3,12 @@ plugins {
 	id 'maven-publish'
 }
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
-
-base {
-	archivesName = project.archives_base_name
-}
 
 repositories {
 	maven { url = "https://maven.shedaniel.me/" }
@@ -16,6 +16,22 @@ repositories {
 	maven { url = "https://maven.wispforest.io/" }
 	maven { url = "https://maven.terraformersmc.com/" }
 	maven { url = "https://maven.blamejared.com/" }
+
+	maven { url = 'https://maven.greenhouseteam.dev/releases/' }
+	maven { url = "https://mvn.devos.one/releases/" }
+	maven { url = "https://jitpack.io/" }
+	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
+
+	exclusiveContent {
+		forRepository {
+			maven {
+				url 'https://cursemaven.com'
+			}
+		}
+		filter {
+			includeGroup 'curse.maven'
+		}
+	}
 }
 
 dependencies {
@@ -25,7 +41,7 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "maven.modrinth:farmers-delight-fabric:${project.delight_version}"
+	modImplementation("vectorwing:FarmersDelight-Refabricated:${project.delight_version}")
 
 	modCompileOnly ("vazkii.botania:Botania:${project.botania_version}") {
 		exclude group: "dev.onyxstudios.cardinal-components-api"
@@ -38,30 +54,6 @@ dependencies {
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
-}
-
-loom {
-    splitEnvironmentSourceSets()
-
-	mods {
-		"modid" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
-		}
-	}
-
-	runs {
-		datagenClient {
-			inherit client
-			name "Data Generation"
-			vmArg "-Dfabric-api.datagen"
-			vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-			vmArg "-Dfabric-api.datagen.modid=${project.modid}"
-
-			runDir "build/datagen"
-		}
-	}
-
 }
 
 processResources {
@@ -77,22 +69,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.archivesBaseName}"}
 	}
 }
 
-// configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -100,11 +85,31 @@ publishing {
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+
+	}
+}
+
+loom {
+	runs {
+		datagenClient {
+			inherit client
+			name "Data Generation"
+			vmArg "-Dfabric-api.datagen"
+			vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
+			vmArg "-Dfabric-api.datagen.modid=${project.modid}"
+
+			runDir "build/datagen"
+		}
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += [
+					'src/main/generated'
+			]
+		}
 	}
 }

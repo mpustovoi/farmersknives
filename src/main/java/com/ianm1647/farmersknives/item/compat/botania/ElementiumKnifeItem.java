@@ -2,6 +2,7 @@ package com.ianm1647.farmersknives.item.compat.botania;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.entity.EquipmentSlot;
@@ -15,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.common.handler.PixieHandler;
 
+
 public class ElementiumKnifeItem extends ManasteelKnifeItem {
-    public ElementiumKnifeItem(Settings props) {
+    public ElementiumKnifeItem(FabricItemSettings props) {
         super(BotaniaAPI.instance().getElementiumItemTier(), props);
     }
 

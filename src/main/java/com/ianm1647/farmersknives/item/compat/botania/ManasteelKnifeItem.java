@@ -1,16 +1,14 @@
 package com.ianm1647.farmersknives.item.compat.botania;
 
-import com.nhoryzon.mc.farmersdelight.item.KnifeItem;
-import net.minecraft.block.BlockState;
+import com.ianm1647.farmersknives.item.*;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.world.World;
 import vazkii.botania.api.BotaniaAPI;
-import vazkii.botania.api.item.SortableTool;
 import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.common.item.equipment.CustomDamageItem;
 import vazkii.botania.common.item.equipment.tool.ToolCommons;
@@ -21,16 +19,16 @@ public class ManasteelKnifeItem extends KnifeItem implements CustomDamageItem {
 
     public static final int MANA_PER_DAMAGE = 60;
 
-    public ManasteelKnifeItem(Settings props) {
+    public ManasteelKnifeItem(FabricItemSettings props) {
         this(BotaniaAPI.instance().getManasteelItemTier(), props);
     }
 
-    public ManasteelKnifeItem(ToolMaterial mat, Settings props) {
+    public ManasteelKnifeItem(ToolMaterial mat, FabricItemSettings props) {
         this(mat, 3, -1.8F, props);
     }
 
-    public ManasteelKnifeItem(ToolMaterial mat, int attackDamage, float attackSpeed, Settings props) {
-        super(mat);
+    public ManasteelKnifeItem(ToolMaterial mat, int i, float v, FabricItemSettings props) {
+        super(mat, props);
     }
 
     @Override
